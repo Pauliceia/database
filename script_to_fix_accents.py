@@ -19,7 +19,8 @@ acronyms = [
     {"old": "dr ", "new": "doutor "},
     {"old": " d. ", "new": " dom "},
     {"old": " cap. ", "new": " capitão "},
-    {"old": " av. ", "new": " avenida "},
+    {"old": "av. ", "new": "avenida "},
+    {"old": "r. ", "new": "rua "},
     {"old": "vila villa ", "new": "villa "}
 ]
 
@@ -62,7 +63,7 @@ for k, linha in shapefile.iterrows():
     if not linha['name'].startswith(linha['type']):
         lista.append(linha['fid'])
 
-shapefile.loc[shapefile['fid'].isin(lista), 'new_name'] = shapefile['type'] + ' '+shapefile['name']
+shapefile.loc[(shapefile['name'] != "") & (shapefile['fid'].isin(lista)), 'new_name'] = shapefile['type'] + ' ' + shapefile['name']
 
 # add the value of 'new_name' to 'name' and delete the old 'new_name'
 shapefile['name'] = shapefile['new_name']
@@ -80,8 +81,8 @@ shapefile['name'] = shapefile.name.apply(fix_acronyms)
 if 'id_type' in shapefile:
     del shapefile['id_type']
 
-# if 'type' in shape:
-#     del shape['type']
+if 'type' in shapefile:
+    del shapefile['type']
 
 if 'perimeter' in shapefile:
     del shapefile['perimeter']
@@ -93,3 +94,5 @@ if not exists(FOLDER_TO_SAVE_SHP):
 
 # save result in a file
 shapefile.to_file(FOLDER_TO_SAVE_SHP + "/" + FILE_TO_SAVE_SHP)
+
+print("It worked!")
