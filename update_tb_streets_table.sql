@@ -6,7 +6,7 @@
 ALTER TABLE streets_pilot_area_new_version
 RENAME changeset_ TO changeset_id;
 
--- fix type of the columns
+-- fix columns type
 ALTER TABLE streets_pilot_area_new_version
 ALTER COLUMN id_street TYPE INT,
 ALTER COLUMN name TYPE VARCHAR(100),
@@ -28,11 +28,11 @@ DROP COLUMN id;
 ALTER TABLE streets_pilot_area_new_version 
 ADD COLUMN id INT;
 
--- copy values from 'id_street' column to created 'id' column above
+-- copy values from 'id_street' column to the created 'id' column above
 UPDATE streets_pilot_area_new_version 
 SET id = id_street;
 
--- add PK constraint to 'id' constraint
+-- add PK constraint to 'id' column
 ALTER TABLE streets_pilot_area_new_version
 ADD PRIMARY KEY (id);
 
@@ -44,14 +44,14 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 -- ************************************************************************************************************************
--- ***** Specific code to Edit
+-- ***** Specific script to add the new streets to Edit database
 -- ************************************************************************************************************************
 
--- add 'perimeter' column
+-- add 'perimeter' column (because the Edit portal uses it)
 ALTER TABLE streets_pilot_area_new_version 
 ADD COLUMN perimeter INT;
 
--- add default value (0) to created column above
+-- add default value (0) to created column above (if perimeter is zero, then Edit portal generates the perimeter based on LineString)
 UPDATE streets_pilot_area_new_version 
 SET perimeter = 0;
 
@@ -60,8 +60,8 @@ SET perimeter = 0;
 -- ***** Rename 'streets_pilot_area_new_version' to 'tb_street'
 -- ************************************************************************************************************************
 
--- remove the FK constraint of tb_places
--- because if there is a FK to streets_pilot_area, then it is not possible to delete it
+-- remove the FK constraint of tb_places,
+-- because if there is a FK related to streets_pilot_area, then it is not possible to delete it
 ALTER TABLE tb_places
 DROP CONSTRAINT IF EXISTS fk_street_id;
 
