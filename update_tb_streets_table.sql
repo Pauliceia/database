@@ -1,3 +1,6 @@
+-- ************************************************************************************************************************
+-- ***** Fix 'streets_pilot_area_new_version' table
+-- ************************************************************************************************************************
 
 -- fix 'changeset_' column name
 ALTER TABLE streets_pilot_area_new_version
@@ -41,23 +44,36 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 -- ************************************************************************************************************************
--- ***** Rename 'streets_pilot_area_new_version' to 'tb_streets'
+-- ***** Specific code to Edit
+-- ************************************************************************************************************************
+
+-- add 'perimeter' column
+ALTER TABLE streets_pilot_area_new_version 
+ADD COLUMN perimeter INT;
+
+-- add default value (0) to created column above
+UPDATE streets_pilot_area_new_version 
+SET perimeter = 0;
+
+
+-- ************************************************************************************************************************
+-- ***** Rename 'streets_pilot_area_new_version' to 'tb_street'
 -- ************************************************************************************************************************
 
 -- remove the FK constraint of tb_places
 -- because if there is a FK to streets_pilot_area, then it is not possible to delete it
 ALTER TABLE tb_places
-DROP CONSTRAINT IF EXISTS constraint_fk_id_street;
+DROP CONSTRAINT IF EXISTS fk_street_id;
 
--- remove the old 'streets_pilot_area' table
-DROP TABLE streets_pilot_area;
+-- remove the old 'tb_street' table
+DROP TABLE tb_street;
 
--- rename 'streets_pilot_area_new_version' table to 'streets_pilot_area'
+-- rename 'streets_pilot_area_new_version' table to 'tb_street'
 ALTER TABLE streets_pilot_area_new_version 
-RENAME TO tb_streets
+RENAME TO tb_street
 
 -- add the FK constraint to the tb_places again
 ALTER TABLE tb_places
 ADD CONSTRAINT constraint_fk_id_street
-FOREIGN KEY (id_street) REFERENCES tb_streets (id)
-ON UPDATE CASCADE ON DELETE CASCADE;
+FOREIGN KEY (id_street) REFERENCES tb_street (id)
+ON UPDATE NO ACTION ON DELETE NO ACTION;
