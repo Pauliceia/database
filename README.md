@@ -8,7 +8,13 @@ workon pauliceia_database
 
 pip install -r requirements.txt
 
-## 2. Import streets_pilot_area
+## 2. Run script
+
+workon pauliceia_database
+
+python script_to_fix_accents.py
+
+## 3. Import streets_pilot_area
 
 1. Import the streets_pilot_area (Shapefile) in the database using ogr2ogr:
 
@@ -18,7 +24,7 @@ ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia user=postgre
 
 1.2. Edit database
 
-ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia_edit user=postgres password=postgres" /home/inpe/Documents/dockers/pauliceia-local/applications/database/streets_pilot_area/streets_pilot_area.shp -nln streets_pilot_area_new_version -a_srs EPSG:4326 -skipfailures -lco FID=fid -lco GEOMETRY_NAME=geom -nlt PROMOTE_TO_MULTI
+ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia_edit user=postgres password=postgres" /home/inpe/Documents/dockers/pauliceia-local/applications/database/streets_pilot_area/streets_pilot_area.shp -nln streets_pilot_area_new_version -a_srs EPSG:4326 -skipfailures -lco FID=id -lco GEOMETRY_NAME=geom -nlt PROMOTE_TO_MULTI
 
 2. Follow the instructions listed on the first section above.
 
