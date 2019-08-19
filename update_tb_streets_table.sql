@@ -3,8 +3,8 @@
 -- ************************************************************************************************************************
 
 -- fix 'changeset_' column name
-ALTER TABLE streets_pilot_area_new_version
-RENAME changeset_ TO changeset_id;
+-- ALTER TABLE streets_pilot_area_new_version
+-- RENAME changeset_ TO changeset_id;
 
 -- fix columns type
 ALTER TABLE streets_pilot_area_new_version
@@ -48,12 +48,12 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- ************************************************************************************************************************
 
 -- add 'perimeter' column (because the Edit portal uses it)
-ALTER TABLE streets_pilot_area_new_version 
-ADD COLUMN perimeter INT;
+-- ALTER TABLE streets_pilot_area_new_version 
+-- ADD COLUMN perimeter INT;
 
 -- add default value (0) to created column above (if perimeter is zero, then Edit portal generates the perimeter based on LineString)
-UPDATE streets_pilot_area_new_version 
-SET perimeter = 0;
+-- UPDATE streets_pilot_area_new_version 
+-- SET perimeter = 0;
 
 
 -- ************************************************************************************************************************

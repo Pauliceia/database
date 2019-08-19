@@ -45,15 +45,32 @@ def fix_acronyms(cell):
 
 # shape['name'] = shape.name.apply(fix_accents)
 
+####################################################################################################
+# Read the Shapefile
+####################################################################################################
+
 # read file
 shapefile = gpd.read_file(DIR_ORIGINAL_SHP)
 
 # print("shapefile.head(5): \n", shapefile.head(5))
 
+####################################################################################################
+# Add new columns and rename some ones
+####################################################################################################
+
+# if 'perimeter' column does not exist, then add it with a default value (i.e. 0)
+if 'perimeter' not in shapefile:
+    shapefile['perimeter'] = 0
+
 # Rename 'changeset_' column to 'changeset_id'
 shapefile.rename(columns = {"changeset_": "changeset_id"}, inplace = True)
 
 # print("shapefile.head(5): \n", shapefile.head(5))
+
+
+####################################################################################################
+# Add default values by some condition
+####################################################################################################
 
 # if there is 'NaN' values, then replace them to an empty string
 shapefile.loc[shapefile['name'].isnull(), 'name'] = ""
@@ -66,6 +83,7 @@ shapefile.loc[shapefile['version'] == 0, 'version'] = 1
 shapefile.loc[shapefile['changeset_id'] == 0, 'changeset_id'] = 2
 
 # print("version == 0: \n", shapefile[shapefile.version == 0].head(5)) 
+
 
 ####################################################################################################
 # Merge 'type' with 'name' column, in order to remove 'type' column
@@ -112,10 +130,14 @@ shapefile['name'] = shapefile.name.apply(fix_acronyms)
 ####################################################################################################
 
 # remove unnecessary attributes
-if 'perimeter' in shapefile:
-    del shapefile['perimeter']
+# 'perimeter' is necessary to 'Edit' portal
+# if 'perimeter' in shapefile:
+#     del shapefile['perimeter']
 
-# print("shapefile.head(5): \n", shapefile.head(5))
+
+####################################################################################################
+# Save the new Shapefile
+####################################################################################################
 
 # verify it the folder exists, if it does not exist, then make it
 if not exists(FOLDER_TO_SAVE_SHP):
@@ -124,4 +146,5 @@ if not exists(FOLDER_TO_SAVE_SHP):
 # save result in a file
 shapefile.to_file(FOLDER_TO_SAVE_SHP + "/" + FILE_TO_SAVE_SHP)
 
+print("shapefile.head(5): \n", shapefile.head(5))
 print("\nIt worked!\n")
