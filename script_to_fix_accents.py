@@ -48,7 +48,7 @@ def fix_accents(attribute):
 
     # try to fix the encoding. if fix is not possible, then return the original attribute
     try:
-        return attribute.encode('latin-1').decode('raw_unicode_escape').encode('latin-1').decode('utf-8')
+        return attribute.encode("latin-1").decode("raw_unicode_escape").encode("latin-1").decode("utf-8")
     except UnicodeDecodeError:
         return attribute
 
@@ -62,14 +62,13 @@ shapefile = gpd.read_file(DIR_ORIGINAL_SHP)
 
 
 ####################################################################################################
-# Add new columns and rename some ones
+# Add new columns and rename someones
 ####################################################################################################
 
-# if 'perimeter' column does not exist, then add it with a default value (i.e. 0)
-if 'perimeter' not in shapefile:
-    shapefile['perimeter'] = 0
+# Fill "perimeter" column with a default value (i.e. 0)
+shapefile["perimeter"] = 0
 
-# Rename 'changeset_' column to 'changeset_id'
+# Rename "changeset_" column to "changeset_id"
 shapefile.rename(columns = {"changeset_": "changeset_id"}, inplace = True)
 
 
@@ -77,13 +76,13 @@ shapefile.rename(columns = {"changeset_": "changeset_id"}, inplace = True)
 # Add default values by some condition
 ####################################################################################################
 
-# if there is 'NaN' values, then replace them to an empty string
-shapefile.loc[shapefile['name'].isnull(), 'name'] = ""
-# shapefile.loc[shapefile['type'].isnull(), 'type'] = ""
+# if there is "NaN" values, then replace them to an empty string
+shapefile.loc[shapefile["name"].isnull(), "name"] = ""
+# shapefile.loc[shapefile["type"].isnull(), "type"] = ""
 
-# add default 'version' and 'changeset_id' when they are '0'
-shapefile.loc[shapefile['version'] == 0, 'version'] = 1
-shapefile.loc[shapefile['changeset_id'] == 0, 'changeset_id'] = 2
+# add default "version" and "changeset_id" when they are "0"
+shapefile.loc[shapefile["version"] == 0, "version"] = 1
+shapefile.loc[shapefile["changeset_id"] == 0, "changeset_id"] = 2
 
 # print("\nshapefile.head(5): \n", shapefile.head(5))
 # print("\nshapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5): \n", shapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5))
@@ -91,31 +90,31 @@ shapefile.loc[shapefile['changeset_id'] == 0, 'changeset_id'] = 2
 
 
 ####################################################################################################
-# Merge 'type' with 'name' column, in order to remove 'type' column
+# Merge "type" with "name" column, in order to remove "type" column
 ####################################################################################################
 """
 # create a new attribute based on name
-shapefile['new_name'] = shapefile['name']
+shapefile["new_name"] = shapefile["name"]
 
 lista = []
 
 for k, linha in shapefile.iterrows():
-    if not linha['name'].startswith(linha['type']):
-        lista.append(linha['fid'])
+    if not linha["name"].startswith(linha["type"]):
+        lista.append(linha["fid"])
 
-# concatenate 'type' with 'name' column
-shapefile.loc[(shapefile['name'] != "") & (shapefile['fid'].isin(lista)), 'new_name'] = shapefile['type'] + ' ' + shapefile['name']
+# concatenate "type" with "name" column
+shapefile.loc[(shapefile["name"] != "") & (shapefile["fid"].isin(lista)), "new_name"] = shapefile["type"] + " " + shapefile["name"]
 
-# add the value of 'new_name' to 'name' and delete the old 'new_name'
-shapefile['name'] = shapefile['new_name']
-del shapefile['new_name']
+# add the value of "new_name" to "name" and delete the old "new_name"
+shapefile["name"] = shapefile["new_name"]
+del shapefile["new_name"]
 
 # remove unnecessary attributes
-if 'id_type' in shapefile:
-    del shapefile['id_type']
+if "id_type" in shapefile:
+    del shapefile["id_type"]
 
-if 'type' in shapefile:
-    del shapefile['type']
+if "type" in shapefile:
+    del shapefile["type"]
 """
 
 ####################################################################################################
@@ -124,14 +123,14 @@ if 'type' in shapefile:
 
 # print("shapefile.head(15): \n", shapefile.head(15))
 # print(shapefile[shapefile.fid==142].name)  
-# print(shapefile[shapefile.fid==168].name)  # empty name, but 'rua' is added as prefix
+# print(shapefile[shapefile.fid==168].name)  # empty name, but "rua" is added as prefix
 
-# apply 'fix_acronyms' function to each cell on my columns
-shapefile['name'] = shapefile.name.apply(fix_acronyms)
+# apply "fix_acronyms" function to each cell on my columns
+shapefile["name"] = shapefile.name.apply(fix_acronyms)
 
-# apply 'fix_accents' function to each cell on my columns
-shapefile['name'] = shapefile.name.apply(fix_accents)
-shapefile['obs'] = shapefile.obs.apply(fix_accents)
+# apply "fix_accents" function to each cell on my columns
+shapefile["name"] = shapefile.name.apply(fix_accents)
+shapefile["obs"] = shapefile.obs.apply(fix_accents)
 
 
 ####################################################################################################
@@ -139,9 +138,9 @@ shapefile['obs'] = shapefile.obs.apply(fix_accents)
 ####################################################################################################
 
 # remove unnecessary attributes
-# 'perimeter' is necessary to 'Edit' portal
-# if 'perimeter' in shapefile:
-#     del shapefile['perimeter']
+# "perimeter" is necessary to "Edit" portal
+# if "perimeter" in shapefile:
+#     del shapefile["perimeter"]
 
 # change the columns order
 shapefile = shapefile[["fid", "id", "id_street", "name", "obs", "first_year", "last_year", "perimeter", 
