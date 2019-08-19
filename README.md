@@ -1,5 +1,6 @@
 # database
 
+
 ## 1. Create or active the environment:
 
 mkvirtualenv -p /usr/bin/python3.5 pauliceia_database
@@ -8,13 +9,20 @@ workon pauliceia_database
 
 pip install -r requirements.txt
 
+
 ## 2. Run script
 
 workon pauliceia_database
 
 python script_to_fix_accents.py
 
-## 3. Import streets_pilot_area
+
+## 3. Verify the generated Shapefile (streets_pilot_area_new). 
+
+If it is correct, then rename the folder 'streets_pilot_area_new' to 'streets_pilot_area'
+
+
+## 4. Import streets_pilot_area
 
 1. Import the streets_pilot_area (Shapefile) in the database using ogr2ogr:
 

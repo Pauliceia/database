@@ -38,6 +38,10 @@ def fix_acronyms(cell):
 
 # this function is not needed anymore, because when I save the Shapefile using geopandas, the accents are fixed
 def fix_accents(attribute):
+    """
+    Source: https://stackoverflow.com/a/52905383
+    """
+
     # if attribute is None, then return an empty string
     if attribute is None:
         return ""
