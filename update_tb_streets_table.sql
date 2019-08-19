@@ -55,6 +55,9 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- UPDATE streets_pilot_area_new_version 
 -- SET perimeter = 0;
 
+-- remove unnecessary table if it exists
+DROP TABLE IF EXISTS tb_type_logradouro;
+
 
 -- ************************************************************************************************************************
 -- ***** Rename 'streets_pilot_area_new_version' to 'tb_street'

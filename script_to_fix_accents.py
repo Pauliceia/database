@@ -4,7 +4,7 @@
 from os import makedirs
 from os.path import exists
 
-import pandas as pd
+# import pandas as pd
 import geopandas as gpd
 
 
@@ -65,8 +65,6 @@ if 'perimeter' not in shapefile:
 # Rename 'changeset_' column to 'changeset_id'
 shapefile.rename(columns = {"changeset_": "changeset_id"}, inplace = True)
 
-# print("shapefile.head(5): \n", shapefile.head(5))
-
 
 ####################################################################################################
 # Add default values by some condition
@@ -75,8 +73,6 @@ shapefile.rename(columns = {"changeset_": "changeset_id"}, inplace = True)
 # if there is 'NaN' values, then replace them to an empty string
 shapefile.loc[shapefile['name'].isnull(), 'name'] = ""
 # shapefile.loc[shapefile['type'].isnull(), 'type'] = ""
-
-# print("version == 0: \n", shapefile[shapefile.version == 0].head(5)) 
 
 # add default 'version' and 'changeset_id' when they are '0'
 shapefile.loc[shapefile['version'] == 0, 'version'] = 1
@@ -126,13 +122,17 @@ shapefile['name'] = shapefile.name.apply(fix_acronyms)
 
 
 ####################################################################################################
-# Remove unnecessary attributes
+# Extra
 ####################################################################################################
 
 # remove unnecessary attributes
 # 'perimeter' is necessary to 'Edit' portal
 # if 'perimeter' in shapefile:
 #     del shapefile['perimeter']
+
+# change the columns order
+shapefile = shapefile[["fid", "id", "id_street", "name", "obs", "first_year", "last_year", "perimeter", 
+                       "version", "changeset_id", "geometry"]]
 
 
 ####################################################################################################
