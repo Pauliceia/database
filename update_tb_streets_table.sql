@@ -120,3 +120,22 @@ ALTER TABLE tb_places
 ADD CONSTRAINT constraint_fk_id_street
 FOREIGN KEY (id_street) REFERENCES tb_street (id)
 ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+
+-- ************************************************************************************************************************
+-- ***** Selects to test...
+-- ************************************************************************************************************************
+
+SELECT *
+FROM (
+	SELECT snv.id as snv_id, tbs.id as tbs_id, snv.id_street as snv_id_street, snv.name as snv_name, tbs.name as tbs_name
+	FROM streets_pilot_area_new_version as snv
+	LEFT JOIN (
+		SELECT tbs.id, tbs.name
+		FROM tb_street as tbs
+		ORDER BY tbs.id
+	) as tbs
+	ON snv.id = tbs.id
+	ORDER BY snv.id
+) as snv_tbs
+WHERE snv_id != tbs_id
