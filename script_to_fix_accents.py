@@ -24,7 +24,8 @@ acronyms = [
     {"old": "av. ", "new": "avenida "},
     {"old": "r. ", "new": "rua "},
     {"old": "vila villa ", "new": "villa "},
-    {"old": "beco becco ", "new": "becco "}
+    {"old": "beco becco ", "new": "becco "},
+    {"old": "viaduto viaducto ", "new": "viaducto "}
 ]
 
 def fix_acronyms(cell):

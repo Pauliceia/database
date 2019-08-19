@@ -9,24 +9,23 @@
 -- fix columns type
 ALTER TABLE streets_pilot_area_new_version
 ALTER COLUMN id_street TYPE INT,
-ALTER COLUMN name TYPE VARCHAR(100),
-ALTER COLUMN obs TYPE VARCHAR(100),
 ALTER COLUMN first_year TYPE INT,
 ALTER COLUMN last_year TYPE INT,
+ALTER COLUMN perimeter TYPE INT NOT NULL DEFAULT 0,
 ALTER COLUMN version TYPE INT NOT NULL DEFAULT 1,
-ALTER COLUMN changeset_id TYPE INT;
+ALTER COLUMN changeset_id TYPE INT NOT NULL DEFAULT 2;
 
 -- remove not needed 'fid' column
 ALTER TABLE streets_pilot_area_new_version 
 DROP COLUMN fid;
 
 -- remove old 'id' column
-ALTER TABLE streets_pilot_area_new_version 
-DROP COLUMN id;
+-- ALTER TABLE streets_pilot_area_new_version 
+-- DROP COLUMN id;
 
 -- create a new 'id' column
-ALTER TABLE streets_pilot_area_new_version 
-ADD COLUMN id INT;
+-- ALTER TABLE streets_pilot_area_new_version 
+-- ADD COLUMN id INT;
 
 -- copy values from 'id_street' column to the created 'id' column above
 UPDATE streets_pilot_area_new_version 
