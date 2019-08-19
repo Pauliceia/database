@@ -9,6 +9,7 @@ import geopandas as gpd
 
 
 DIR_ORIGINAL_SHP = "streets_pilot_area/streets_pilot_area.shp"
+# DIR_ORIGINAL_SHP = "streets_pilot_area_teste/streets_pilot_area.shp"
 
 FOLDER_TO_SAVE_SHP = "streets_pilot_area_new"
 FILE_TO_SAVE_SHP = "streets_pilot_area.shp"
@@ -36,14 +37,17 @@ def fix_acronyms(cell):
 
 
 # this function is not needed anymore, because when I save the Shapefile using geopandas, the accents are fixed
-# def fix_accents(attribute):
-#     if attribute is None:
-#         return ""
+def fix_accents(attribute):
+    # if attribute is None, then return an empty string
+    if attribute is None:
+        return ""
 
-#     return attribute.encode('latin-1').decode('raw_unicode_escape').encode('latin-1').decode('utf-8')
+    # try to fix the encoding. if fix is not possible, then return the original attribute
+    try:
+        return attribute.encode('latin-1').decode('raw_unicode_escape').encode('latin-1').decode('utf-8')
+    except UnicodeDecodeError:
+        return attribute
 
-
-# shape['name'] = shape.name.apply(fix_accents)
 
 ####################################################################################################
 # Read the Shapefile
@@ -52,7 +56,6 @@ def fix_acronyms(cell):
 # read file
 shapefile = gpd.read_file(DIR_ORIGINAL_SHP)
 
-# print("shapefile.head(5): \n", shapefile.head(5))
 
 ####################################################################################################
 # Add new columns and rename some ones
@@ -78,7 +81,9 @@ shapefile.loc[shapefile['name'].isnull(), 'name'] = ""
 shapefile.loc[shapefile['version'] == 0, 'version'] = 1
 shapefile.loc[shapefile['changeset_id'] == 0, 'changeset_id'] = 2
 
-# print("version == 0: \n", shapefile[shapefile.version == 0].head(5)) 
+# print("\nshapefile.head(5): \n", shapefile.head(5))
+# print("\nshapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5): \n", shapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5))
+# print("\nshapefile[~(shapefile.obs == "")].head(5): \n", shapefile[~(shapefile.obs == "")].head(5))
 
 
 ####################################################################################################
@@ -117,8 +122,12 @@ if 'type' in shapefile:
 # print(shapefile[shapefile.fid==142].name)  
 # print(shapefile[shapefile.fid==168].name)  # empty name, but 'rua' is added as prefix
 
-# apply the 'fix_acronyms' function to each cell on my 'name' column
+# apply 'fix_acronyms' function to each cell on my columns
 shapefile['name'] = shapefile.name.apply(fix_acronyms)
+
+# apply 'fix_accents' function to each cell on my columns
+shapefile['name'] = shapefile.name.apply(fix_accents)
+shapefile['obs'] = shapefile.obs.apply(fix_accents)
 
 
 ####################################################################################################
@@ -146,5 +155,8 @@ if not exists(FOLDER_TO_SAVE_SHP):
 # save result in a file
 shapefile.to_file(FOLDER_TO_SAVE_SHP + "/" + FILE_TO_SAVE_SHP)
 
-print("shapefile.head(5): \n", shapefile.head(5))
+# print("\nshapefile.head(5): \n", shapefile.head(5))
+print("\nshapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5): \n", shapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5))
+# print("\nshapefile[~(shapefile.obs == "")].head(5): \n", shapefile[~(shapefile.obs == "")].head(5))
+
 print("\nIt worked!\n")
