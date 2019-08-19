@@ -28,12 +28,18 @@ DROP COLUMN fid;
 -- ADD COLUMN id INT;
 
 -- copy values from 'id_street' column to the created 'id' column above
-UPDATE streets_pilot_area_new_version 
-SET id = id_street;
+-- WARNING: verify if the 'id' and 'id_street' are equal, if they are not equal, then use this code
+-- UPDATE streets_pilot_area_new_version 
+-- SET id = id_street;
 
 -- add PK constraint to 'id' column
-ALTER TABLE streets_pilot_area_new_version
-ADD PRIMARY KEY (id);
+-- WARNING: if the 'streets_pilot_area_new_version' table was inserted by OGR using 'id' as 'FID' (PK), then this code is not needed
+-- ALTER TABLE streets_pilot_area_new_version
+-- ADD PRIMARY KEY (id);
+
+-- ************************************************************************************************************************
+-- ***** Specific script to add the new streets to Pauliceia database
+-- ************************************************************************************************************************
 
 -- add FK constraint to 'changet_id' column
 ALTER TABLE streets_pilot_area_new_version 
@@ -59,7 +65,42 @@ DROP TABLE IF EXISTS tb_type_logradouro;
 
 
 -- ************************************************************************************************************************
--- ***** Rename 'streets_pilot_area_new_version' to 'tb_street'
+-- ***** Rename 'streets_pilot_area_new_version' ...
+-- ************************************************************************************************************************
+
+-- ************************************************************************************************************************
+-- ***** ... to 'streets_pilot_area' (Pauliceia database)
+-- ************************************************************************************************************************
+
+-- remove the FK constraint of 'places_pilot_area' and 'places_pilot_area2', 
+-- because if there is a FK to 'streets_pilot_area', then it is not possible to delete it
+ALTER TABLE places_pilot_area 
+DROP CONSTRAINT IF EXISTS constraint_fk_id_street;
+
+ALTER TABLE places_pilot_area2
+DROP CONSTRAINT IF EXISTS constraint_fk_id_street;
+
+-- remove the old 'streets_pilot_area' table
+DROP TABLE streets_pilot_area;
+
+-- rename 'streets_pilot_area_new_version' table to 'streets_pilot_area'
+ALTER TABLE streets_pilot_area_new_version 
+RENAME TO streets_pilot_area
+
+-- add the FK constraint to the places_pilot_area and places_pilot_area2 again
+ALTER TABLE places_pilot_area
+ADD CONSTRAINT constraint_fk_id_street
+FOREIGN KEY (id_street) REFERENCES streets_pilot_area (id)
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE places_pilot_area2
+ADD CONSTRAINT constraint_fk_id_street
+FOREIGN KEY (id_street) REFERENCES streets_pilot_area (id)
+ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+-- ************************************************************************************************************************
+-- ***** ... to 'tb_street' (Edit database)
 -- ************************************************************************************************************************
 
 -- remove the FK constraint of tb_places,
