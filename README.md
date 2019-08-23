@@ -38,6 +38,6 @@ ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia user=postgre
 
 ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia_edit user=postgres password=postgres" /home/inpe/Documents/dockers/pauliceia-local/applications/database/streets_pilot_area/streets_pilot_area.shp -nln streets_pilot_area_new_version -a_srs EPSG:4326 -skipfailures -lco FID=id -lco GEOMETRY_NAME=geom -nlt PROMOTE_TO_MULTI
 
-3. Run the following script to fix the table requirements:
+3. Run 'manually' the following script to fix the table requirements:
 
 update.sql
