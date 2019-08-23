@@ -123,12 +123,17 @@ ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 
 -- ************************************************************************************************************************
--- ***** Selects to test...
+-- ***** A "SELECT" clause, in order to test the tables...
 -- ************************************************************************************************************************
 
 SELECT *
 FROM (
-	SELECT snv.id as snv_id, tbs.id as tbs_id, snv.id_street as snv_id_street, snv.name as snv_name, tbs.name as tbs_name
+	SELECT 
+		snv.id as street_new_version_id, 
+		tbs.id as table_street_id, 
+		snv.id_street as street_new_version_id_street, 
+		snv.name as street_new_version_name, 
+		tbs.name as table_street_name
 	FROM streets_pilot_area_new_version as snv
 	LEFT JOIN (
 		SELECT tbs.id, tbs.name
@@ -138,4 +143,5 @@ FROM (
 	ON snv.id = tbs.id
 	ORDER BY snv.id
 ) as snv_tbs
-WHERE snv_id != tbs_id
+-- WHERE street_new_version_id != table_street_id
+-- WHERE table_street_id is NULL
