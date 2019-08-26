@@ -103,6 +103,16 @@ RENAME TO tb_street;
 ALTER SEQUENCE streets_pilot_area_new_version_id_seq 
 RENAME TO tb_street_id_seq;
 
+-- Fix 'first_year' with no data, it adds default value (i.e. 1930)
+UPDATE tb_street
+SET first_year = 1930
+WHERE first_year = 0;
+
+-- Fix 'last_year' with no data, it adds default value (i.e. 1940)
+UPDATE tb_street
+SET last_year = 1940
+WHERE last_year = 0;
+
 
 -- ************************************************************************************************************************
 -- ***** Subsection 3.1.
