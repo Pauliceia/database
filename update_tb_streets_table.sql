@@ -105,15 +105,31 @@ RENAME TO tb_street_id_seq;
 
 
 -- ************************************************************************************************************************
--- ***** Subsection 3.1. 'rua da cantareira' had two vectors, because of that, they were merged, ...
+-- ***** Subsection 3.1.
 -- ************************************************************************************************************************
 
--- ... but there were two "places 0", then remove the unnecessary one
-DELETE FROM tb_places
-WHERE id = 3825;
+-- 'rua da cantareira' had two vectors, because of that, they were merged, but there were two "points 0", then remove the unnecessary one
+-- DELETE FROM tb_places
+-- WHERE id = 3825;
+
+-- 'rua da cantareira' had two vectors, because of that, they were merged, but there were two "points 0", then remove the unnecessary one (id = 3825)
+-- record is deleted if 'id = 3825' is found by SELECT clause
+DELETE FROM tb_places p
+WHERE p.id IN (
+	SELECT id
+	FROM tb_places
+	WHERE id = 3825
+);
+
+-- there are two 'points 0' related to 'praça marechal deodoro', then remove the unnecessary one (id = 4084)
+DELETE FROM tb_places p
+WHERE p.id IN (
+	SELECT id
+	FROM tb_places
+	WHERE id = 4084
+);
 
 -- ************************************************************************************************************************
-
 
 -- Add the FK constraint to the tb_places table again
 ALTER TABLE tb_places
@@ -125,7 +141,7 @@ ON UPDATE NO ACTION ON DELETE NO ACTION;
 -- ************************************************************************************************************************
 -- ***** Section 4. A "SELECT" clause, in order to test the tables...
 -- ************************************************************************************************************************
-
+/*
 SELECT *
 FROM (
 	SELECT 
@@ -155,8 +171,4 @@ WHERE name = 'rua carlos de campos';
 SELECT *
 FROM tb_places
 WHERE id_street = 280;
-
-
-
-
-
+*/
