@@ -1,5 +1,5 @@
 ﻿-- ************************************************************************************************************************
--- ***** Generic script
+-- ***** Section 1. Generic script
 -- ************************************************************************************************************************
 
 -- Fix 'changeset_' column name
@@ -40,7 +40,7 @@ DROP COLUMN fid;
 
 
 -- ************************************************************************************************************************
--- ***** Specific script to 'pauliceia' database
+-- ***** Section 2. Specific script to 'pauliceia' database
 -- ************************************************************************************************************************
 
 -- add FK constraint to 'changet_id' column
@@ -81,7 +81,7 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 -- ************************************************************************************************************************
--- ***** Specific script to 'pauliceia_edit' database
+-- ***** Section 3. Specific script to 'pauliceia_edit' database
 -- ************************************************************************************************************************
 
 -- Remove the FK constraint of tb_places,
@@ -103,6 +103,18 @@ RENAME TO tb_street;
 ALTER SEQUENCE streets_pilot_area_new_version_id_seq 
 RENAME TO tb_street_id_seq;
 
+
+-- ************************************************************************************************************************
+-- ***** Subsection 3.1. 'rua da cantareira' had two vectors, because of that, they were merged, ...
+-- ************************************************************************************************************************
+
+-- ... but there were two "places 0", then remove the unnecessary one
+DELETE FROM tb_places
+WHERE id = 3825;
+
+-- ************************************************************************************************************************
+
+
 -- Add the FK constraint to the tb_places table again
 ALTER TABLE tb_places
 ADD CONSTRAINT constraint_fk_id_street
@@ -111,7 +123,7 @@ ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 
 -- ************************************************************************************************************************
--- ***** A "SELECT" clause, in order to test the tables...
+-- ***** Section 4. A "SELECT" clause, in order to test the tables...
 -- ************************************************************************************************************************
 
 SELECT *
