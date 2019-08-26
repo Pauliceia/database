@@ -24,9 +24,9 @@ If it is correct, then rename the folder 'streets_pilot_area_new' to 'streets_pi
 
 ## 4. Import streets_pilot_area
 
-1. Follow the instructions listed on the first section above in order to fix the streets_pilot_area (Shapefile).
+1. If you did not fix the Shapefile, then follow the instructions listed on the first section above in order to fix the streets_pilot_area (Shapefile).
 
-2. Import the streets_pilot_area (Shapefile) in the database using ogr2ogr.
+2. Import the streets_pilot_area (Shapefile) in the database using ogr2ogr using the following instructions.
 
 The following command imports the 'streets_pilot_area.shp' file in PostgreSQL database, using 'id' as the primary key (i.e. FID). The generated table is called 'streets_pilot_area_new_version'.
 
