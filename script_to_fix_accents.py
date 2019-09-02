@@ -8,11 +8,17 @@ from os.path import exists
 import geopandas as gpd
 
 
-DIR_ORIGINAL_SHP = "streets_pilot_area/streets_pilot_area.shp"
-# DIR_ORIGINAL_SHP = "streets_pilot_area_teste/streets_pilot_area.shp"
+# path to the original Shapefile
+ORIGINAL_SHP = "streets_pilot_area/streets_pilot_area.shp"
+# ORIGINAL_SHP = "streets_pilot_area_teste/streets_pilot_area.shp"
 
-FOLDER_TO_SAVE_SHP = "streets_pilot_area_new"
-FILE_TO_SAVE_SHP = "streets_pilot_area.shp"
+# folder path to save the exported Shapefile
+FOLDER_TO_SAVE_EXPORTED_SHP = "streets_pilot_area_new"
+# file name to save the exported Shapefile
+FILE_TO_SAVE_EXPORTED_SHP = "streets_pilot_area.shp"
+
+# file encoding to the exported Shapefile
+FILE_ENCODING = 'utf-8'
 
 
 # acronyms or double words
@@ -59,7 +65,7 @@ def fix_accents(attribute):
 ####################################################################################################
 
 # read file
-shapefile = gpd.read_file(DIR_ORIGINAL_SHP)
+shapefile = gpd.read_file(ORIGINAL_SHP)
 
 
 ####################################################################################################
@@ -144,7 +150,9 @@ shapefile["obs"] = shapefile.obs.apply(fix_accents)
 #     del shapefile["perimeter"]
 
 # change the columns order
-shapefile = shapefile[["fid", "id", "id_street", "name", "obs", "first_year", "last_year", "perimeter", 
+# shapefile = shapefile[["fid", "id", "id_street", "name", "obs", "first_year", "last_year", "perimeter", 
+#                        "version", "changeset_id", "geometry"]]
+shapefile = shapefile[["id", "id_street", "name", "obs", "first_year", "last_year", "perimeter", 
                        "version", "changeset_id", "geometry"]]
 
 
@@ -153,14 +161,17 @@ shapefile = shapefile[["fid", "id", "id_street", "name", "obs", "first_year", "l
 ####################################################################################################
 
 # verify it the folder exists, if it does not exist, then make it
-if not exists(FOLDER_TO_SAVE_SHP):
-    makedirs(FOLDER_TO_SAVE_SHP)
+if not exists(FOLDER_TO_SAVE_EXPORTED_SHP):
+    makedirs(FOLDER_TO_SAVE_EXPORTED_SHP)
 
 # save result in a file
-shapefile.to_file(FOLDER_TO_SAVE_SHP + "/" + FILE_TO_SAVE_SHP)
+shapefile.to_file(FOLDER_TO_SAVE_EXPORTED_SHP + "/" + FILE_TO_SAVE_EXPORTED_SHP, encoding=FILE_ENCODING)
 
 # print("\nshapefile.head(5): \n", shapefile.head(5))
-print("\nshapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5): \n", shapefile[(shapefile.id == 33) | (shapefile.id == 120)].head(5))
+print("\nshapefile[...].head(5): \n", 
+        shapefile[
+            (shapefile.id == 33) | (shapefile.id == 107) | (shapefile.id == 108) | (shapefile.id == 120) | (shapefile.id == 128)
+        ].head(5))
 # print("\nshapefile[~(shapefile.obs == "")].head(5): \n", shapefile[~(shapefile.obs == "")].head(5))
 
 print("\nIt worked!\n")
