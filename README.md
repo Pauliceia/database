@@ -34,7 +34,7 @@ ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia_edit user=po
 
 3. Inside 'pauliceia_edit' database, run 'manually' the following script to fix the table requirements. This script rename 'streets_pilot_area_new_version' table to 'tb_street' and fix some problems:
 
-01_update_tb_streets_table.sql
+sql/04_update_tb_streets_table.sql
 
 
 ## 5. Import 'tb_street' table from 'pauliceia_edit' database into 'pauliceia' database
@@ -43,6 +43,22 @@ ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia_edit user=po
 
 2. Inside 'pauliceia' database, run 'manually' the following script to fix the table requirements:
 
-02_restore_tb_streets_table_into_pauliceia_database.sql
+sql/05_restore_tb_streets_table_into_pauliceia_database.sql
 
 3. Remove and create the layer again on Geoserver
+
+
+## 6. Import 'tb_places' table from 'pauliceia_edit' database into 'pauliceia' database
+
+1. If sequence name and primary key constraint from 'tb_places' table ('pauliceia_edit' database) are the same from 'places_pilot_area' table ('pauliceia' database), then you should run the following script to fix the places_pilot_area table:
+
+sql/06_fix_places_pilot_area_before_restoring_tb_places.sql
+
+2. Backup the 'tb_places' table from 'pauliceia_edit' database and restore it into 'pauliceia' database.
+If during restore, errors related to 'tb_street' or 'tb_user' relations appear, you can ignore them, because these tables do not exist in 'pauliceia' database. Hence, these errors are just warnings and not problems.
+
+3. Inside 'pauliceia' database, run 'manually' the following script to fix the table requirements:
+
+sql/06_restore_tb_places_table_into_pauliceia_database.sql
+
+4. Remove and create the layer again on Geoserver
