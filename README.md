@@ -50,14 +50,15 @@ sql/05_restore_tb_streets_table_into_pauliceia_database.sql
 
 ## 6. Import 'tb_places' table from 'pauliceia_edit' database into 'pauliceia' database
 
-1. If sequence name and primary key constraint from 'tb_places' table ('pauliceia_edit' database) are the same from 'places_pilot_area' table ('pauliceia' database), then you should run the following script to fix the places_pilot_area table:
+1. Open QGIS and export 'tb_places' table from 'pauliceia_edit' database as a Shapefile called 'places_pilot_area.shp'.
 
-sql/06_fix_places_pilot_area_before_restoring_tb_places.sql
+2. Import the generated Shapefile above in the database using ogr2ogr using the following instructions.
 
-2. Backup the 'tb_places' table from 'pauliceia_edit' database and restore it into 'pauliceia' database.
-If during restore, errors related to 'tb_street' or 'tb_user' relations appear, you can ignore them, because these tables do not exist in 'pauliceia' database. Hence, these errors are just warnings and not problems.
+The following command imports the 'places_pilot_area.shp' file in the 'pauliceia' database, using 'id' as the primary key (i.e. FID). The generated table is called 'places_pilot_area_new_version'.
 
-3. Inside 'pauliceia' database, run 'manually' the following script to fix the table requirements:
+ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia user=postgres password=postgres" /home/inpe/Documents/dockers/pauliceia-local/applications/database/places_pilot_area/places_pilot_area.shp -nln places_pilot_area_new_version -a_srs EPSG:4326 -skipfailures -lco FID=id -lco GEOMETRY_NAME=geom -nlt PROMOTE_TO_MULTI
+
+3. Inside 'pauliceia' database, run the following script to fix the table requirements:
 
 sql/06_restore_tb_places_table_into_pauliceia_database.sql
 
