@@ -43,6 +43,9 @@ DROP COLUMN fid;
 -- ***** Section 2. Specific script to 'pauliceia' database
 -- ************************************************************************************************************************
 
+-- Create a backup from 'tb_streets' from 'pauliceia_edit' database and restore it into 'pauliceia' database
+
+/*
 -- add FK constraint to 'changet_id' column
 ALTER TABLE streets_pilot_area_new_version 
 ADD CONSTRAINT constraint_changeset_id FOREIGN KEY (changeset_id)
@@ -78,7 +81,7 @@ ALTER TABLE places_pilot_area2
 ADD CONSTRAINT constraint_fk_id_street
 FOREIGN KEY (id_street) REFERENCES streets_pilot_area (id)
 ON UPDATE CASCADE ON DELETE CASCADE;
-
+*/
 
 -- ************************************************************************************************************************
 -- ***** Section 3. Specific script to 'pauliceia_edit' database
