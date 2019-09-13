@@ -12,6 +12,7 @@ RENAME first_mont TO first_month;
 ALTER TABLE places_pilot_area_new_version
 RENAME descriptio TO description;
 
+
 -- Fix columns types
 ALTER TABLE places_pilot_area_new_version
 -- "number"
@@ -37,6 +38,7 @@ ALTER COLUMN source TYPE TEXT,
 ALTER COLUMN id_user TYPE INT,
 ALTER COLUMN id_street TYPE INT;
 
+
 -- Remove the old 'places_pilot_area' table, if it exists
 DROP TABLE IF EXISTS places_pilot_area;
 
@@ -49,3 +51,9 @@ ALTER SEQUENCE IF EXISTS places_pilot_area_new_version_id_seq RENAME TO places_p
 
 -- Rename the PK from 'places_pilot_area' table
 ALTER INDEX IF EXISTS places_pilot_area_new_version_pkey RENAME TO places_pilot_area_pkey;
+
+-- Add the FK constraint to the 'places_pilot_area' table
+ALTER TABLE places_pilot_area
+ADD CONSTRAINT places_pilot_area_fk_street_id
+FOREIGN KEY (id_street) REFERENCES streets_pilot_area (id)
+ON UPDATE CASCADE ON DELETE CASCADE;

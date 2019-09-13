@@ -5,7 +5,7 @@
 -- Remove the FK constraint from 'places_pilot_area*',
 -- because if there is a FK related to 'streets_pilot_area' table, then it is not possible to remove it
 ALTER TABLE places_pilot_area
-DROP CONSTRAINT IF EXISTS fk_street_id;
+DROP CONSTRAINT IF EXISTS places_pilot_area_fk_street_id;
 
 ALTER TABLE places_pilot_area2
 DROP CONSTRAINT IF EXISTS constraint_fk_id_street;
@@ -15,6 +15,7 @@ DROP CONSTRAINT IF EXISTS constraint_fk_id_street;
 
 -- Do it, just if it is necessary
 -- TODO: fix problems from 'version_' tables, where the sequence name from 'version_' table is the save from original table
+-- If the above problem is fixed, then this code can be removed
 
 -- Remove the sequence from table id
 ALTER TABLE version_streets_pilot_area 
@@ -30,28 +31,17 @@ DROP TABLE IF EXISTS streets_pilot_area;
 ALTER TABLE tb_street 
 RENAME TO streets_pilot_area;
 
-
--- ************************************************************************************************************************
-
--- Do it, just if it is necessary
--- TODO: backup 'tb_places' from 'pauliceia_edit' and restore in 'pauliceia'
-
-DELETE FROM places_pilot_area
-WHERE id = 3825;
-
-DELETE FROM places_pilot_area
-WHERE id = 4084;
-
--- ************************************************************************************************************************
-
+-- Fix sequence name
+ALTER SEQUENCE tb_street_id_seq 
+RENAME TO streets_pilot_area_id_seq;
 
 -- Add the FK constraint to the 'places_pilot_area*' table again
 ALTER TABLE places_pilot_area
-ADD CONSTRAINT fk_street_id
+ADD CONSTRAINT places_pilot_area_fk_street_id
 FOREIGN KEY (id_street) REFERENCES streets_pilot_area (id)
 ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE places_pilot_area2
-ADD CONSTRAINT fk_street_id
+ADD CONSTRAINT places_pilot_area2_fk_street_id
 FOREIGN KEY (id_street) REFERENCES streets_pilot_area (id)
 ON UPDATE CASCADE ON DELETE CASCADE;
