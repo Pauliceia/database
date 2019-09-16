@@ -38,7 +38,7 @@ ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia user=postgre
 
 sql/4_1_restore_tb_places_from_edit_database_into_pauliceia_database.sql
 
-4. Remove and create the layer again on Geoserver
+4. Remove and create the layer again on Geoserver, if it exists.
 
 
 ### 4.2 Import and fix the 'streets_pilot_area' Shapefile into the 'pauliceia_edit' database
@@ -64,10 +64,10 @@ sql/4_2_fix_tb_street_table_in_the_edit_database.sql
 
 2. If the 'streets_pilot_area' Shapefile was updated, then follow the instructions described in section 4.2.
 
-Backup the 'tb_street' table from 'pauliceia_edit' database and restore it into 'pauliceia' database.
+3. Backup the 'tb_street' table from 'pauliceia_edit' database and restore it into 'pauliceia' database.
 
-3. Inside 'pauliceia' database, run 'manually' the following script to fix the table requirements:
+4. Inside 'pauliceia' database, run 'manually' the following script to fix the table requirements:
 
 sql/4_3_restore_tb_streets_table_into_pauliceia_database.sql
 
-4. Remove and create the layer again on Geoserver
+5. Remove and create the layer again on Geoserver.
