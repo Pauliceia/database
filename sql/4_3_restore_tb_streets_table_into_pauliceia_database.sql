@@ -18,7 +18,7 @@ DROP CONSTRAINT IF EXISTS constraint_fk_id_street;
 -- If the above problem is fixed, then this code can be removed
 
 -- Remove the sequence from table id
-ALTER TABLE version_streets_pilot_area 
+ALTER TABLE version_streets_pilot_area
 ALTER COLUMN id DROP DEFAULT;
 
 -- ************************************************************************************************************************
@@ -28,12 +28,17 @@ ALTER COLUMN id DROP DEFAULT;
 DROP TABLE IF EXISTS streets_pilot_area;
 
 -- Rename 'tb_street' table to 'streets_pilot_area'
-ALTER TABLE tb_street 
+ALTER TABLE tb_street
 RENAME TO streets_pilot_area;
 
 -- Fix sequence name
-ALTER SEQUENCE tb_street_id_seq 
+ALTER SEQUENCE tb_street_id_seq
 RENAME TO streets_pilot_area_id_seq;
+
+-- Fix indexes
+-- geom
+-- ALTER INDEX IF EXISTS places_pilot_area_new_version_geom_geom_idx
+-- RENAME TO places_pilot_area_geom_geom_idx;
 
 -- Add the FK constraint to the 'places_pilot_area*' table again
 ALTER TABLE places_pilot_area

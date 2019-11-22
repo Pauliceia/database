@@ -2,6 +2,7 @@
 -- ***** Section 1. Generic script
 -- ************************************************************************************************************************
 
+
 -- Fix columns names
 ALTER TABLE places_pilot_area_new_version
 RENAME original_n TO original_number;
@@ -39,18 +40,27 @@ ALTER COLUMN id_user TYPE INT,
 ALTER COLUMN id_street TYPE INT;
 
 
+-- Fix sequences
+-- PK
+ALTER SEQUENCE IF EXISTS places_pilot_area_new_version_id_seq 
+RENAME TO places_pilot_area_id_seq;
+
+
+-- Fix indexes
+-- geom
+ALTER INDEX IF EXISTS places_pilot_area_new_version_geom_geom_idx
+RENAME TO places_pilot_area_geom_geom_idx;
+-- PK
+ALTER INDEX IF EXISTS places_pilot_area_new_version_pkey 
+RENAME TO places_pilot_area_pkey;
+
+
 -- Remove the old 'places_pilot_area' table, if it exists
-DROP TABLE IF EXISTS places_pilot_area;
+-- DROP TABLE IF EXISTS places_pilot_area;
 
 -- Rename 'tb_places' table to 'places_pilot_area' table
 ALTER TABLE places_pilot_area_new_version 
 RENAME TO places_pilot_area;
-
--- Rename the sequence from 'places_pilot_area_new_version_id_seq' table
-ALTER SEQUENCE IF EXISTS places_pilot_area_new_version_id_seq RENAME TO places_pilot_area_id_seq;
-
--- Rename the PK from 'places_pilot_area' table
-ALTER INDEX IF EXISTS places_pilot_area_new_version_pkey RENAME TO places_pilot_area_pkey;
 
 -- Add the FK constraint to the 'places_pilot_area' table
 ALTER TABLE places_pilot_area

@@ -17,7 +17,7 @@ workon pauliceia_database
 python script_to_fix_accents.py
 
 
-## 3. Verify the generated Shapefile (streets_pilot_area_new). 
+## 3. Verify the generated Shapefile (streets_pilot_area_new).
 
 If it is correct, then rename the folder 'streets_pilot_area_new' to 'streets_pilot_area'
 
@@ -28,17 +28,27 @@ If it is correct, then rename the folder 'streets_pilot_area_new' to 'streets_pi
 
 1. Open QGIS and export 'tb_places' table from 'pauliceia_edit' database as a Shapefile called 'places_pilot_area.shp'.
 
-2. Import the generated Shapefile above in the database using ogr2ogr using the following instructions.
+2. Execute the following SQL command to remove the old 'places_pilot_area' table, if it exists
+
+```
+DROP TABLE IF EXISTS places_pilot_area;
+```
+
+3. Import the generated Shapefile above in the database using ogr2ogr using the following instructions.
 
 The following command imports the 'places_pilot_area.shp' file in the 'pauliceia' database, using 'id' as the primary key (i.e. FID). The generated table is called 'places_pilot_area_new_version'.
 
-ogr2ogr -append -f "PostgreSQL" PG:"host=localhost dbname=pauliceia user=postgres password=postgres" /home/inpe/Documents/dockers/pauliceia-local/applications/database/places_pilot_area/places_pilot_area.shp -nln places_pilot_area_new_version -a_srs EPSG:4326 -skipfailures -lco FID=id -lco GEOMETRY_NAME=geom -nlt PROMOTE_TO_MULTI
+```
+ogr2ogr -append -f "PostgreSQL" PG:"dbname='pauliceia' host='localhost' port='5432' user='postgres' password='postgres'" places_pilot_area/places_pilot_area.shp -nln places_pilot_area_new_version -a_srs EPSG:4326 -skipfailures -lco FID=id -lco GEOMETRY_NAME=geom -nlt PROMOTE_TO_MULTI
+```
 
-3. Inside 'pauliceia' database, run the following script to fix the table requirements:
+4. Inside 'pauliceia' database, run the following script to fix the table requirements:
 
+```
 sql/4_1_restore_tb_places_from_edit_database_into_pauliceia_database.sql
+```
 
-4. Remove and create the layer again on Geoserver, if it exists.
+5. Remove and create the layer again on Geoserver, if it exists.
 
 
 ### 4.2 Import and fix the 'streets_pilot_area' Shapefile into the 'pauliceia_edit' database

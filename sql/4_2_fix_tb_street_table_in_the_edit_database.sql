@@ -2,9 +2,11 @@
 -- ***** Section 1. Generic script
 -- ************************************************************************************************************************
 
+
 -- Fix 'changeset_' column name
 ALTER TABLE streets_pilot_area_new_version
 RENAME changeset_ TO changeset_id;
+
 
 -- Fix columns types
 ALTER TABLE streets_pilot_area_new_version
@@ -24,13 +26,20 @@ ALTER COLUMN changeset_id TYPE INT,
 ALTER COLUMN changeset_id SET NOT NULL,
 ALTER COLUMN changeset_id SET DEFAULT 2;
 
+
+-- Fix indexes
+-- geom
+-- ALTER INDEX IF EXISTS places_pilot_area_new_version_geom_geom_idx
+-- RENAME TO places_pilot_area_geom_geom_idx;
+
+
 -- Remove not needed 'fid' column
-ALTER TABLE streets_pilot_area_new_version 
+ALTER TABLE streets_pilot_area_new_version
 DROP COLUMN fid;
 
 -- copy values from 'id_street' column to the created 'id' column above
 -- WARNING: verify if the 'id' and 'id_street' are equal, if they are not equal, then use this code
--- UPDATE streets_pilot_area_new_version 
+-- UPDATE streets_pilot_area_new_version
 -- SET id = id_street;
 
 -- add PK constraint to 'id' column
@@ -50,11 +59,11 @@ DROP TABLE IF EXISTS tb_street;
 DROP TABLE IF EXISTS tb_type_logradouro;
 
 -- Rename 'streets_pilot_area_new_version' table to 'tb_street'
-ALTER TABLE streets_pilot_area_new_version 
+ALTER TABLE streets_pilot_area_new_version
 RENAME TO tb_street;
 
 -- Fix sequence name
-ALTER SEQUENCE streets_pilot_area_new_version_id_seq 
+ALTER SEQUENCE streets_pilot_area_new_version_id_seq
 RENAME TO tb_street_id_seq;
 
 -- Fix 'first_year' with no data, it adds default value (i.e. 1930)
@@ -108,11 +117,11 @@ ON UPDATE NO ACTION ON DELETE NO ACTION;
 /*
 SELECT *
 FROM (
-	SELECT 
-		snv.id as street_new_version_id, 
-		tbs.id as table_street_id, 
-		snv.id_street as street_new_version_id_street, 
-		snv.name as street_new_version_name, 
+	SELECT
+		snv.id as street_new_version_id,
+		tbs.id as table_street_id,
+		snv.id_street as street_new_version_id_street,
+		snv.name as street_new_version_name,
 		tbs.name as table_street_name
 	FROM streets_pilot_area_new_version as snv
 	LEFT JOIN (
